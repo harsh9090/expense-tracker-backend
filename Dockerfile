@@ -7,7 +7,7 @@ COPY . .
 RUN mvn clean install -DskipTests
 
 
-FROM openjdk:17.0.1-jdk-slim
+FROM container-registry.oracle.com/java/openjdk:23
 COPY --from=build /target/*.jar demo.jar
 
 # Expose port 8080
