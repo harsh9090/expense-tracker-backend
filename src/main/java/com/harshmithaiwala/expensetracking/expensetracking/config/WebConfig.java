@@ -20,7 +20,7 @@ public class WebConfig {
                                 "https://expense-tracker-frontend-tool.netlify.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
+                        .allowedHeaders("Authorization", "Content-Type", "Accept")
                         .exposedHeaders("Authorization")
                         .allowCredentials(true);
             }
