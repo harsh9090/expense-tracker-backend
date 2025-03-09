@@ -23,6 +23,7 @@ public class Income {
     private User user;
 
     private Double amount;
+    private String category;
     private String source;  // e.g., Salary, Freelance, Investments
     private java.util.Date date;
 
@@ -32,6 +33,7 @@ public class Income {
                 "id=" + id +
                 ", user=" + user +
                 ", amount=" + amount +
+                ", category='" + category + '\'' +
                 ", source='" + source + '\'' +
                 ", date=" + date +
                 '}';

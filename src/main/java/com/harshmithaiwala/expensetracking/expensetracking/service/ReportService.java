@@ -103,21 +103,22 @@ public class ReportService {
 
         List<Map<String, Object>> categoryList = new ArrayList<>();
 
-        // 🔹 Group expenses by source
+        // Group income by category
         Map<String, Double> incomeSummary = incomeRepo.findByUser(user)
                 .stream()
                 .collect(Collectors.groupingBy(
-                        Income::getSource,
+                        Income::getCategory,
                         Collectors.summingDouble(Income::getAmount)
                 ));
 
-        // 🔹 Convert to a list
+        // Convert to a list
         for (Map.Entry<String, Double> entry : incomeSummary.entrySet()) {
             Map<String, Object> category = new HashMap<>();
-            category.put("source", entry.getKey());
-            category.put("total_spent", entry.getValue());
+            category.put("category", entry.getKey());
+            category.put("total", entry.getValue());
             categoryList.add(category);
         }
+
         return categoryList;
     }
 

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/expenses")
@@ -52,9 +53,12 @@ public class ExpenseController {
 
     // ✅ Delete Expense
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteExpense(@PathVariable UUID id, Authentication authentication) {
+    public ResponseEntity<Map<String, String>> deleteExpense(@PathVariable UUID id, Authentication authentication) {
         expenseService.deleteExpense(id, authentication.getName());
-        return ResponseEntity.ok("Expense deleted successfully");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Expense deleted successfully");
+        response.put("id", id.toString());
+        return ResponseEntity.ok(response);
     }
 
 

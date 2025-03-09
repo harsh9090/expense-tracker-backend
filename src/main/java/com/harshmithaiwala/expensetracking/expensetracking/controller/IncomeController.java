@@ -28,48 +28,68 @@ public class IncomeController {
 
     // ✅ Add Income
     @PostMapping
-    public ResponseEntity<Income> addIncome(@RequestBody Income income, Authentication authentication) {
-        System.out.println("✅ ADD INCOME API CALLED");
-        return ResponseEntity.ok(incomeService.addIncome(income, authentication.getName()));
+    public ResponseEntity<Map<String, Object>> addIncome(@RequestBody Income income, Authentication authentication) {
+        Income savedIncome = incomeService.addIncome(income, authentication.getName());
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Income added successfully");
+        response.put("id", savedIncome.getId().toString());
+        response.put("amount", savedIncome.getAmount());
+        response.put("category", savedIncome.getCategory());
+        response.put("source", savedIncome.getSource());
+        return ResponseEntity.ok(response);
     }
 
     // ✅ Get All Income for Logged-in User
     @GetMapping
     public ResponseEntity<List<Income>> getIncome(Authentication authentication) {
-        System.out.println("✅ FETCH INCOME API CALLED");
         return ResponseEntity.ok(incomeService.getIncome(authentication.getName()));
     }
 
     // ✅ Update Income
     @PutMapping("/{id}")
-    public ResponseEntity<Income> updateIncome(@PathVariable UUID id, @RequestBody Income income, Authentication authentication) {
-        System.out.println("✅ UPDATE INCOME API CALLED");
-        return ResponseEntity.ok(incomeService.updateIncome(id, income, authentication.getName()));
+    public ResponseEntity<Map<String, Object>> updateIncome(
+            @PathVariable UUID id,
+            @RequestBody Income income,
+            Authentication authentication) {
+        Income updatedIncome = incomeService.updateIncome(id, income, authentication.getName());
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Income updated successfully");
+        response.put("id", updatedIncome.getId().toString());
+        response.put("amount", updatedIncome.getAmount());
+        response.put("category", updatedIncome.getCategory());
+        response.put("source", updatedIncome.getSource());
+        return ResponseEntity.ok(response);
     }
 
     // ✅ Delete Income
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteIncome(@PathVariable UUID id, Authentication authentication) {
-        System.out.println("✅ DELETE INCOME API CALLED");
         incomeService.deleteIncome(id, authentication.getName());
-        String s = "Income deleted successfully";
-        return ResponseEntity.ok(Collections.singletonMap("message", "Income deleted successfully"));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Income deleted successfully");
+        response.put("id", id.toString());
+        return ResponseEntity.ok(response);
     }
-    @GetMapping("/source/{category}")
-    public Optional<Object[]> getExpensesByCategory(@PathVariable String category, Authentication authentication) {
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<Map<String, Object>> getIncomeByCategory(
+            @PathVariable String category,
+            Authentication authentication) {
         User user = userRepo.findByEmail(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        System.out.println(user.getEmail());
-        return incomeRepo.findByUserAndSource(user, category);
+        Double total = incomeRepo.getTotalByCategory(user, category);
+        Map<String, Object> response = new HashMap<>();
+        response.put("category", category);
+        response.put("total", total);
+        return ResponseEntity.ok(response);
     }
 
     // Get Monthly Income
-    @GetMapping("/monthly")
+    @GetMapping("/monthly/{month}/{year}")
     public ResponseEntity<List<Income>> getMonthlyIncome(
-            @RequestParam(required = false) Integer year,
-            @RequestParam(required = false) Integer month,
+            @PathVariable int month,
+            @PathVariable int year,
             Authentication authentication) {
-        System.out.println("✅ FETCH MONTHLY INCOME API CALLED");
         return ResponseEntity.ok(incomeService.getMonthlyIncome(authentication.getName(), year, month));
     }
 }

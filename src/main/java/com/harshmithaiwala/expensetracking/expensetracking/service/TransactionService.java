@@ -51,9 +51,9 @@ public class TransactionService {
             Map<String, Object> transaction = new HashMap<>();
             transaction.put("id", income.getId());
             transaction.put("amount", income.getAmount()); // Positive for income
-            transaction.put("category", income.getSource());
+            transaction.put("category", income.getCategory());
             transaction.put("type", TransactionType.INCOME);
-            transaction.put("description", "Income from " + income.getSource());
+            transaction.put("description", "Income from category: " + income.getCategory());
             transaction.put("date", income.getDate());
             transactions.add(transaction);
         }

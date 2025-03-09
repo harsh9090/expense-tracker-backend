@@ -57,6 +57,7 @@ public class IncomeService {
 
         existingIncome.setAmount(updatedIncome.getAmount());
         existingIncome.setSource(updatedIncome.getSource());
+        existingIncome.setCategory(updatedIncome.getCategory());
         existingIncome.setDate(updatedIncome.getDate());
 
         return incomeRepo.save(existingIncome);
