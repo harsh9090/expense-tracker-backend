@@ -62,4 +62,14 @@ public class IncomeController {
         System.out.println(user.getEmail());
         return incomeRepo.findByUserAndSource(user, category);
     }
+
+    // Get Monthly Income
+    @GetMapping("/monthly")
+    public ResponseEntity<List<Income>> getMonthlyIncome(
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month,
+            Authentication authentication) {
+        System.out.println("✅ FETCH MONTHLY INCOME API CALLED");
+        return ResponseEntity.ok(incomeService.getMonthlyIncome(authentication.getName(), year, month));
+    }
 }

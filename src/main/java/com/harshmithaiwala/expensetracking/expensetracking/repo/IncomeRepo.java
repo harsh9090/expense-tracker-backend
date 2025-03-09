@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,4 +21,6 @@ public interface IncomeRepo extends JpaRepository<Income, UUID> {
     @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Income e WHERE e.user = :user AND e.source = :source")
     Double getTotalSpentByCategory(@Param("user") User user, @Param("source") String source);
 
+    // Find income records between two dates for a specific user
+    List<Income> findByUserAndDateBetween(User user, Date startDate, Date endDate);
 }

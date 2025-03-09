@@ -21,6 +21,7 @@ public interface ExpenseRepo extends JpaRepository<Expense, UUID> {
     @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expense e WHERE e.user = :user AND e.category = :category")
     Double getTotalSpentByCategory(@Param("user") User user, @Param("category") String category);
 
-
+    @Query("SELECT e FROM Expense e WHERE e.user = :user AND MONTH(e.date) = :month AND YEAR(e.date) = :year")
+    List<Expense> findByUserAndMonthAndYear(@Param("user") User user, @Param("month") int month, @Param("year") int year);
 
 }

@@ -66,5 +66,13 @@ public class ExpenseController {
         return expenseRepo.findByUserAndCategory(user, category);
     }
 
+    // Get Monthly Expenses
+    @GetMapping("/monthly/{month}/{year}")
+    public ResponseEntity<List<Expense>> getMonthlyExpenses(
+            @PathVariable int month,
+            @PathVariable int year,
+            Authentication authentication) {
+        return ResponseEntity.ok(expenseService.getMonthlyExpenses(authentication.getName(), month, year));
+    }
 
 }

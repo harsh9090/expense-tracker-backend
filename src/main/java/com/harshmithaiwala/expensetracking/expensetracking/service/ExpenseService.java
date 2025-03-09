@@ -97,4 +97,12 @@ public class ExpenseService {
 
         expenseRepository.delete(expense);
     }
+
+    // Get Monthly Expenses
+    public List<Expense> getMonthlyExpenses(String email, int month, int year) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        
+        return expenseRepository.findByUserAndMonthAndYear(user, month, year);
+    }
 }
